@@ -29,4 +29,5 @@ Shurl is a simple short URL project built using the Gin framework in Go. It prov
 - **Go (Golang)** 
 - **Gin** 
 - **Redis** 
+- **GORM** 
 

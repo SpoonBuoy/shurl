@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://arsalan.live/gb-dark-min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <title>shurl</title>
+     <style>
+        body {
+    
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Ensure the body takes the full viewport height */
+            margin: 0; /* Remove default margin */
+            text-align: center;
+        }
+         input, button {
+            padding: 10px 20px;
+            border-radius: 10px; /* Adjust the radius to control the roundness of corners */
+            border: 1px solid #50575c; /* Border color */
+             /* Background color */
+            color: #5a5555; /* Text color */
+            font-size: 16px;
+        }
+
+       
+    </style>
+</head>
+<body>
+
+<h2>[shurl]</h2>
+<p> URL Shortener</p>
+
+<form id="myForm">
+    
+    <input type="text" id="textInput" name="textInput" required placeholder="Link to Shorten">
+    <br>
+    <br>
+    
+    <button type="submit">Shorten</button>
+</form>
+
+<p id="responseMessage"></p>
+
+<script>
+    function generateRandomLongString() {
+        // Generate a random long integer
+        const randomLong = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+
+        // Convert the long integer to a string
+        const randomLongString = randomLong.toString();
+
+        return randomLongString;
+    }
+    document.getElementById("myForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Get the input value
+        var inputValue = document.getElementById("textInput").value;
+        userId = generateRandomLongString();
+        // Make a POST request using fetch API
+        fetch("http://arsalan.live:8082/create-short-url", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ long_url: inputValue, user_id : userId}),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Display the response below the form
+            document.getElementById("responseMessage").innerHTML = "<h5> Shortened Link </h5> <a href='" + data.short_url + "' target='_blank'>" + data.short_url + "</a>";
+        })
+        .catch(error => {
+            // Handle errors
+            console.error("Error:", error);
+            document.getElementById("responseMessage").innerText = "Error occurred.";
+        });
+        document.getElementById('textInput').value = ''
+    });
+</script>
+
+</body>
+</html>

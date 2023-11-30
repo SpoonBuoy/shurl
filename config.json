@@ -1,0 +1,7 @@
+{
+  "port": ":8080",
+  "host": "localhost/",
+  "redis-addr": "localhost:6379",
+  "redis-password": "arsalan",
+  "redis-db": 0
+}

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"url-shortener/config"
 	"url-shortener/handler"
 	"url-shortener/store"
 
@@ -28,8 +30,9 @@ func main() {
 	r.GET("/:shortUrl", func(c *gin.Context) {
 		handler.HandleShortUrlRedirect(c)
 	})
-
-	err := r.Run(":8080")
+	port := config.GetConfig().Port
+	fmt.Println(config.GetConfig())
+	err := r.Run(port)
 	if err != nil {
 		panic(err)
 	}

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"url-shortener/config"
 	"url-shortener/shortener"
 	"url-shortener/store"
 
@@ -21,14 +22,15 @@ func CreateShortUrl(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	//clean url
+	if !strings.HasPrefix(creationRequest.LongUrl, "https://") || !strings.HasPrefix(creationRequest.LongUrl, "http://") {
+		creationRequest.LongUrl = "https://" + creationRequest.LongUrl
+	}
 	shortUrl := shortener.GenerateShortLink(creationRequest.LongUrl, creationRequest.UserId)
 	store.SaveUrlMapping(shortUrl, creationRequest.LongUrl, creationRequest.UserId)
-	host := "http://localhost:8080/"
+	//host := "http://localhost:8080/"
+	host := config.GetConfig().Host
 	url := host + shortUrl
-	//clean url
-	if !strings.HasPrefix(url, "https://") || !strings.HasPrefix(url, "http://") {
-		url = "https://" + url
-	}
 
 	c.JSON(200, gin.H{
 		"message":   "short url created successfuly",

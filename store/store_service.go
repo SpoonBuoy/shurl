@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"time"
+	"url-shortener/config"
 
 	"github.com/go-redis/redis/v8"
 )
@@ -20,12 +21,18 @@ var (
 const CacheDuration = 6 * time.Hour
 
 func InitializeStore() *StorageService {
+	cfg := config.GetConfig()
+	// redisClient := redis.NewClient(&redis.Options{
+	// 	Addr:     "127.0.0.1:6379",
+	// 	Password: "arsalan",
+	// 	DB:       0,
+	// })
+	fmt.Println("In Store", cfg)
 	redisClient := redis.NewClient(&redis.Options{
-		Addr:     "127.0.0.1:6379",
-		Password: "arsalan",
-		DB:       0,
+		Addr:     cfg.RedisAddr,
+		Password: cfg.RedisPassword,
+		DB:       cfg.RedisDB,
 	})
-
 	pong, err := redisClient.Ping(ctx).Result()
 	if err != nil {
 		panic(fmt.Sprintf("Errro init rdis %v", err))

@@ -23,7 +23,7 @@ func CreateShortUrl(c *gin.Context) {
 		return
 	}
 	//clean url
-	if !strings.HasPrefix(creationRequest.LongUrl, "https://") || !strings.HasPrefix(creationRequest.LongUrl, "http://") {
+	if !strings.HasPrefix(creationRequest.LongUrl, "https://") && !strings.HasPrefix(creationRequest.LongUrl, "http://") {
 		creationRequest.LongUrl = "https://" + creationRequest.LongUrl
 	}
 	shortUrl := shortener.GenerateShortLink(creationRequest.LongUrl, creationRequest.UserId)

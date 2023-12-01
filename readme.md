@@ -31,8 +31,18 @@ Find it here :
 
             //redis credentials
             "redis-password": "password", 
-            
+
+            //redis db index 
             "redis-db": 0 
+            
+            //clients IP Table cleanup after
+             "client-threshold-minutes": 5,
+             
+             //rate limit [token bucket algo]
+             "rate-limit": 0.1,
+            
+            //burst [bucket size]
+             "burst": 1
          }
 
 ## Usage

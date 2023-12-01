@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"url-shortener/config"
 	"url-shortener/handler"
+	"url-shortener/middleware"
 	"url-shortener/store"
 
 	"github.com/gin-gonic/gin"
@@ -16,6 +17,8 @@ func init() {
 func main() {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
+	r.Use(middleware.AllowCors)
+	r.Use(middleware.PerClientRateLimiter)
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "Url shortener running",

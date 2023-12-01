@@ -4,14 +4,20 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"time"
+
+	"golang.org/x/time/rate"
 )
 
 type Config struct {
-	Port          string `json:"port"`
-	Host          string `json:"host"`
-	RedisAddr     string `json:"redis-addr"`
-	RedisPassword string `json:"redis-password"`
-	RedisDB       int    `json:"redis-db"`
+	Port                   string        `json:"port"`
+	Host                   string        `json:"host"`
+	RedisAddr              string        `json:"redis-addr"`
+	RedisPassword          string        `json:"redis-password"`
+	RedisDB                int           `json:"redis-db"`
+	ClientThresholdMinutes time.Duration `json:"client-threshold-minutes"`
+	RateLimit              rate.Limit    `json:"rate-limit"`
+	Burst                  int           `json:"burst"`
 }
 
 var ShurlConfig Config

@@ -1,10 +1,10 @@
 {
-  "port": ":8082",
-  "host": "http://localhost/",
+  "port": ":8080",
+  "host": "http://localhost:8080/",
   "redis-addr": "localhost:6379",
   "redis-password": "arsalan",
   "redis-db": 0,
-  "client-threshold-minutes": 1,
+  "client-threshold-minutes": 5,
   "rate-limit": 0.1,
   "burst": 1
 }

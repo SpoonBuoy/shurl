@@ -53,44 +53,66 @@
 
         return randomLongString;
     }
-    document.getElementById("myForm").addEventListener("submit", function(event) {
-        event.preventDefault(); // Prevent the default form submission
-
-        // Get the input value
-        var inputValue = document.getElementById("textInput").value;
-        userId = generateRandomLongString();
-        // Make a POST request using fetch API
-        fetch("http://localhost:8082/create-short-url", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ long_url: inputValue, user_id : userId}),
-        })
-        .then(response => {
-            if (response.status === 429) {
-                 //console.log("Too Many Requests");
-                 throw new Error('Too Many Requests');
-            } 
-            return response.json()
-        })
-        .then(data => {
-           
-            // Display the response below the form
-            document.getElementById("responseMessage").innerHTML = "<h5> Shortened Link </h5> <a href='" + data.short_url + "' target='_blank'>" + data.short_url + "</a>";
-        })
-        .catch(error => {
-            // Handle errors
-            //console.error("Error:", error);
-            if (error.message === 'Too Many Requests') {
-                 document.getElementById("responseMessage").innerText = "Too many requests, try again";
-            } else {
-                 document.getElementById("responseMessage").innerText = "Error occurred.";
-            } 
+    const path = "../config.json"
+    var addr
+    //read config file 
+    //to get host address
+    fetch(path)
+    .then(response => {
+        if(!response.ok){
+            throw new Error(response.status)
+        }
+        return response.json();
+    })
+    .then(data => {
+        addr = data.host
+        //console.log(addr)
+        makeSubmitLive();
+    })
+    .catch(error => {
+        console.error("Error: ", error)
+    })
+    function makeSubmitLive() {
+        document.getElementById("myForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            console.log(addr)
+            // Get the input value
+            var inputValue = document.getElementById("textInput").value;
+            userId = generateRandomLongString();
+            // Make a POST request using fetch API
+            fetch(addr + "create-short-url", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ long_url: inputValue, user_id : userId}),
+            })
+            .then(response => {
+                if (response.status === 429) {
+                    //console.log("Too Many Requests");
+                    throw new Error('Too Many Requests');
+                } 
+                return response.json()
+            })
+            .then(data => {
             
+                // Display the response below the form
+                document.getElementById("responseMessage").innerHTML = "<h5> Shortened Link </h5> <a href='" + data.short_url + "' target='_blank'>" + data.short_url + "</a>";
+            })
+            .catch(error => {
+                // Handle errors
+                //console.error("Error:", error);
+                if (error.message === 'Too Many Requests') {
+                    document.getElementById("responseMessage").innerText = "Too many requests, try again";
+                } else {
+                    document.getElementById("responseMessage").innerText = "Error occurred.";
+                } 
+                
+            });
+            document.getElementById('textInput').value = ''
         });
-        document.getElementById('textInput').value = ''
-    });
+    }
+    
 </script>
 
 </body>

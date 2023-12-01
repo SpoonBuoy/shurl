@@ -18,7 +18,7 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 	r.Use(middleware.AllowCors)
-	r.Use(middleware.PerClientRateLimiter)
+	//r.Use(middleware.PerClientRateLimiter)
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "Url shortener running",
@@ -26,7 +26,7 @@ func main() {
 
 	})
 
-	r.POST("/create-short-url", func(c *gin.Context) {
+	r.POST("/create-short-url", middleware.PerClientRateLimiter, func(c *gin.Context) {
 		handler.CreateShortUrl(c)
 	})
 
